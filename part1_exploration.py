@@ -65,7 +65,16 @@ print(result_teams)
 # 3. What is the date range of available data?
 
 # 4. Which data source (Hawkins/Kinexon/Vald) has the most records?
-
+# 4. Which data source (Hawkins/Kinexon/Vald) has the most records?
+print("\n--- 4. Records Per Data Source ---")
+query_sources = f"""
+SELECT data_source,
+       COUNT(*) AS record_count
+FROM research_experiment_refactor_test
+GROUP BY data_source
+ORDER BY record_count DESC;
+"""
+print(pd.read_sql((query_sources), engine))
 # 5. Are there any athletes with missing or invalid names?
 
 # 6. How many athletes have data from multiple sources (2 or 3 systems)?
