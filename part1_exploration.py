@@ -65,7 +65,6 @@ print(result_teams)
 # 3. What is the date range of available data?
 
 # 4. Which data source (Hawkins/Kinexon/Vald) has the most records?
-# 4. Which data source (Hawkins/Kinexon/Vald) has the most records?
 print("\n--- 4. Records Per Data Source ---")
 query_sources = f"""
 SELECT data_source,
