@@ -49,21 +49,24 @@ result_unique = pd.read_sql(query_unique_athletes, engine)
 print(result_unique)
 
 # 2. How many different sports/teams are represented? (Carson)
+print("\n--- 2. Number of Teams/Sports ---")
+query_teams = f"""
+SELECT COUNT(DISTINCT team) AS num_teams
+FROM research_experiment_refactor_test;
+"""
+print(pd.read_sql(query_teams, engine))
 
 # 3. What is the date range of available data?
 print("\n--- 3. Date Range of Available Data ---")
-
 query_date_range = """
 SELECT
     MIN(timestamp) AS earliest_date,
     MAX(timestamp) AS latest_date
 FROM research_experiment_refactor_test;
 """
-
 result_date_range = pd.read_sql(query_date_range, engine)
 print(result_date_range)
 
-# 4. Which data source (Hawkins/Kinexon/Vald) has the most records?
 # 4. Which data source (Hawkins/Kinexon/Vald) has the most records?
 print("\n--- 4. Records Per Data Source ---")
 query_sources = f"""
