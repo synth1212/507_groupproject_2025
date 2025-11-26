@@ -49,6 +49,18 @@ result_unique = pd.read_sql(query_unique_athletes, engine)
 print(result_unique)
 
 # 2. How many different sports/teams are represented? (Carson)
+pdf = pd.read_sql("SELECT * FROM research_experiment_refactor_test LIMIT 5;", engine)
+print(pdf.columns)
+print(pdf.head())
+
+
+print("\n--- 2. Different Sports/Teams ---")
+query_unique_teams = """
+SELECT COUNT(DISTINCT team) AS unique_teams
+FROM research_experiment_refactor_test;
+"""
+result_teams = pd.read_sql(query_unique_teams, engine)
+print(result_teams)
 
 # 3. What is the date range of available data?
 
