@@ -111,6 +111,74 @@ ORDER BY num_sources DESC;
 """
 print(pd.read_sql(query_multisource, engine))
 
+# -------------------------------------------------------------
+# Summary Report
+# -------------------------------------------------------------
+
+print("\n=== Summary Report ===")
+print("Table: research_experiment_refactor_test")
+
+# 1. Unique Athletes
+result_unique = pd.read_sql(query_unique_athletes, engine)
+print("1. Unique athletes:")
+print(result_unique)
+
+# 2. Unique Teams
+result_teams = pd.read_sql(query_teams, engine)
+print("\n2. Unique teams/sports:")
+print(result_teams)
+
+# 3. Date Range
+result_date_range = pd.read_sql(query_date_range, engine)
+print("\n3. Date range:")
+print(result_date_range)
+
+# 4. Data sources
+result_sources = pd.read_sql(query_sources, engine)
+print("\n4. Data sources:")
+print(result_sources)
+
+# 5. Missing or invalid names
+result_missing = pd.read_sql(query_missing_names, engine)
+print("\n5. Missing or invalid player names:")
+print(result_missing)
+
+# 6. Multi-source athletes
+result_multisource = pd.read_sql(query_multisource, engine)
+print("\n6. Athletes with data from multiple systems:")
+print(result_multisource)
+
+# Summary Per Source
+query_source_summary = """
+SELECT
+    data_source,
+    COUNT(*) AS record_count,
+    MIN(timestamp) AS earliest_date,
+    MAX(timestamp) AS latest_date
+FROM research_experiment_refactor_test
+GROUP BY data_source
+ORDER BY record_count DESC;
+"""
+
+# -------------------------------------------------------------
+# Save Summary CSV
+# -------------------------------------------------------------
+
+summary_csv = {
+    "Unique Athletes": result_unique.iloc[0,0],
+    "Unique Teams": result_teams.iloc[0,0],
+    "Date Start": result_date_range.iloc[0,0],
+    "Date End": result_date_range.iloc[0,1],
+    "Top Source": result_sources.sort_values("record_count", ascending=False).iloc[0,0],
+    "Missing/Invalid Names": result_missing.iloc[0,0],
+    "Multi-Source Athletes": result_multisource.iloc[0,0],
+}
+
+pd.DataFrame([summary_csv]).to_csv("part1_summary.csv", index=False)
+print("\n Saved summary CSV: part1_summary.csv")
+
+engine.dispose()
+
 #------------------------------------
 #1.3 Data Quality Assessment Findings
 #------------------------------------
