@@ -78,3 +78,75 @@ print(pd.read_sql((query_sources), engine))
 
 # 6. How many athletes have data from multiple sources (2 or 3 systems)?
 
+#1.3 Metric Discovery & Selection
+
+print("\n--- 1.3 Top 10 Metrics Per Data Source ---")
+
+# Helper: function to get top 10 metrics for a data_source
+def top10_metrics_for_source(source):
+    query = f"""
+    SELECT metric,
+           COUNT(*) AS metric_count
+    FROM research_experiment_refactor_test
+    WHERE data_source = '{source}'
+    GROUP BY metric
+    ORDER BY metric_count DESC
+    LIMIT 10;
+    """
+    return pd.read_sql(query, engine)
+
+# a) Top 10 metrics for each data source
+print("\nTop 10 metrics - Hawkins")
+top_hawkins = top10_metrics_for_source("hawkins")
+print(top_hawkins)
+
+print("\nTop 10 metrics - Kinexon")
+top_kinexon = top10_metrics_for_source("kinexon")
+print(top_kinexon)
+
+print("\nTop 10 metrics - Vald")
+top_vald = top10_metrics_for_source("vald")
+print(top_vald)
+
+# b) How many unique metrics exist across all data sources?
+print("\n--- Unique Metrics Across All Sources ---")
+query_unique_metrics = """
+SELECT COUNT(DISTINCT metric) AS unique_metrics
+FROM research_experiment_refactor_test;
+"""
+unique_metrics = pd.read_sql(query_unique_metrics, engine)
+print(unique_metrics)
+
+# c) For each data source, show date range and record count for its TOP 10 metrics
+print("\n--- Date Range & Record Count for Top 10 Metrics (per source) ---")
+
+def date_range_for_top_metrics(source):
+    query = f"""
+    SELECT
+        metric,
+        MIN(`timestamp`) AS first_timestamp,
+        MAX(`timestamp`) AS last_timestamp,
+        COUNT(*) AS record_count
+    FROM research_experiment_refactor_test
+    WHERE data_source = '{source}'
+      AND metric IN (
+          SELECT metric
+          FROM research_experiment_refactor_test
+          WHERE data_source = '{source}'
+          GROUP BY metric
+          ORDER BY COUNT(*) DESC
+          LIMIT 10
+      )
+    GROUP BY metric
+    ORDER BY record_count DESC;
+    """
+    return pd.read_sql(query, engine)
+
+print("\nHawkins - Top metrics date range & counts")
+print(date_range_for_top_metrics("hawkins"))
+
+print("\nKinexon - Top metrics date range & counts")
+print(date_range_for_top_metrics("kinexon"))
+
+print("\nVald - Top metrics date range & counts")
+print(date_range_for_top_metrics("vald"))
