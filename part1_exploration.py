@@ -64,6 +64,7 @@ result_date_range = pd.read_sql(query_date_range, engine)
 print(result_date_range)
 
 # 4. Which data source (Hawkins/Kinexon/Vald) has the most records?
+# 4. Which data source (Hawkins/Kinexon/Vald) has the most records?
 print("\n--- 4. Records Per Data Source ---")
 query_sources = f"""
 SELECT data_source,
@@ -77,7 +78,7 @@ print(pd.read_sql((query_sources), engine))
 
 # 6. How many athletes have data from multiple sources (2 or 3 systems)?
 
-#1.3 Metric Discovery & Selection
+#1.3 Data Quality Assessment Findings
 
 print("\n--- 1.3 Top 10 Metrics Per Data Source ---")
 
@@ -119,24 +120,27 @@ print(unique_metrics)
 # c) For each data source, show date range and record count for its TOP 10 metrics
 print("\n--- Date Range & Record Count for Top 10 Metrics (per source) ---")
 
+print("\n--- Date Range & Record Count for Top 10 Metrics (per source) ---")
+
 def date_range_for_top_metrics(source):
     query = f"""
     SELECT
-        metric,
-        MIN(`timestamp`) AS first_timestamp,
-        MAX(`timestamp`) AS last_timestamp,
+        t.metric,
+        MIN(t.`timestamp`) AS first_timestamp,
+        MAX(t.`timestamp`) AS last_timestamp,
         COUNT(*) AS record_count
-    FROM research_experiment_refactor_test
-    WHERE data_source = '{source}'
-      AND metric IN (
-          SELECT metric
-          FROM research_experiment_refactor_test
-          WHERE data_source = '{source}'
-          GROUP BY metric
-          ORDER BY COUNT(*) DESC
-          LIMIT 10
-      )
-    GROUP BY metric
+    FROM research_experiment_refactor_test t
+    JOIN (
+        SELECT metric, COUNT(*) AS metric_count
+        FROM research_experiment_refactor_test
+        WHERE data_source = '{source}'
+        GROUP BY metric
+        ORDER BY metric_count DESC
+        LIMIT 10
+    ) AS top
+      ON t.metric = top.metric
+     AND t.data_source = '{source}'
+    GROUP BY t.metric
     ORDER BY record_count DESC;
     """
     return pd.read_sql(query, engine)
