@@ -118,38 +118,15 @@ unique_metrics = pd.read_sql(query_unique_metrics, engine)
 print(unique_metrics)
 
 # c) For each data source, show date range and record count for its TOP 10 metrics
-print("\n--- Date Range & Record Count for Top 10 Metrics (per source) ---")
-
-print("\n--- Date Range & Record Count for Top 10 Metrics (per source) ---")
-
-def date_range_for_top_metrics(source):
-    query = f"""
-    SELECT
-        t.metric,
-        MIN(t.`timestamp`) AS first_timestamp,
-        MAX(t.`timestamp`) AS last_timestamp,
-        COUNT(*) AS record_count
-    FROM research_experiment_refactor_test t
-    JOIN (
-        SELECT metric, COUNT(*) AS metric_count
-        FROM research_experiment_refactor_test
-        WHERE data_source = '{source}'
-        GROUP BY metric
-        ORDER BY metric_count DESC
-        LIMIT 10
-    ) AS top
-      ON t.metric = top.metric
-     AND t.data_source = '{source}'
-    GROUP BY t.metric
-    ORDER BY record_count DESC;
-    """
-    return pd.read_sql(query, engine)
-
-print("\nHawkins - Top metrics date range & counts")
-print(date_range_for_top_metrics("hawkins"))
-
-print("\nKinexon - Top metrics date range & counts")
-print(date_range_for_top_metrics("kinexon"))
-
-print("\nVald - Top metrics date range & counts")
-print(date_range_for_top_metrics("vald"))
+print("\n--- 11. Date Range & Record Count by Data Source ---")
+query_source_summary = f"""
+SELECT
+    data_source,
+    COUNT(*) AS record_count,
+    MIN(timestamp) AS earliest_date,
+    MAX(timestamp) AS latest_date
+FROM research_experiment_refactor_test
+GROUP BY data_source
+ORDER BY record_count DESC;
+"""
+print(pd.read_sql((query_source_summary), engine))
