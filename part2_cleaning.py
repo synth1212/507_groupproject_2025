@@ -110,11 +110,64 @@ print(result_pct)
 # ----------------------------------------------------------------------------------------------------------------------
 ## 2.1.3 For each sport/team, calculate what percentage of athletes have at least 5 measurements for your selected metrics
 # ----------------------------------------------------------------------------------------------------------------------
+print("\n--- 2. Percentage of athletes with >=5 measurements for selected metrics, by team ---")
 
+query_pct = """
+SELECT
+    team,
+    COUNT(*) AS total_athletes,
+    SUM(CASE WHEN n_measurements >= 5 THEN 1 ELSE 0 END) AS athletes_5_plus,
+    ROUND(
+        100.0 * SUM(CASE WHEN n_measurements >= 5 THEN 1 ELSE 0 END) / COUNT(*),
+        2
+    ) AS pct_athletes_5_plus
+FROM (
+    SELECT
+        team,
+        playername,
+        COUNT(*) AS n_measurements
+    FROM research_experiment_refactor_test
+    WHERE metric IN (
+        'Peak Velocity(m/s)',
+        'Jump Height(m)',
+        'Peak Propulsive Force(N)',
+        'System Weight(N)',
+        'Propulsive Net Impulse(N.s)'
+    )
+    GROUP BY team, playername
+) AS per_athlete
+GROUP BY team
+ORDER BY team;
+"""
+
+result_pct = pd.read_sql(query_pct, engine)
+print(result_pct)
 # ----------------------------------------------------------------------------------------------------------------------
 ## 2.1.4 Determine if you have sufficient data to answer your research question
 # ----------------------------------------------------------------------------------------------------------------------
+dataset_strength_paragraph = """
+The SBU Athletics dataset is unusually strong for applied sport science research 
+because it combines a large-scale, multi-year sample with consistent longitudinal 
+tracking of key biomechanical performance metrics. Most published research on 
+jump mechanics is constrained by small sample sizes (10–30 athletes), limited 
+testing sessions, or isolated laboratory trials. In contrast, this dataset 
+contains over 32,000 jump-related measurements across dozens of teams, with many 
+athletes exceeding the five-measurement threshold needed for stable force–time 
+analysis. The breadth of the dataset — covering peak force, propulsive impulse, 
+peak velocity, system weight, and jump height — allows for integrated modeling 
+of mechanical output, neuromuscular performance, and load-based variability.
 
+Additionally, the high frequency and repeated-measures structure of the dataset 
+enable evaluation of within-athlete trends across training cycles, competitive 
+seasons, and recovery periods. This level of temporal density is rarely available 
+in applied settings and provides exceptional power to investigate how force-based 
+and velocity-based metrics interact to predict jump height. The diversity of teams 
+and athlete groups further enhances generalizability and supports cross-sport 
+comparisons. Together, these features make the dataset uniquely valuable for answering 
+complex research questions about performance readiness, fatigue, asymmetry, and 
+injury risk in elite collegiate populations.
+"""
+print(dataset_strength_paragraph)
 
 # ----------------------------------
 # 2.2 Data Transformation Challenge
