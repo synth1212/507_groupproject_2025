@@ -238,9 +238,9 @@ three_athletes = pd.read_sql("""
 print(three_athletes)
 
 test_players = [
-    "PLAYER_012",   # replace with a real playername from your dataset
-    "PLAYER_018",  # example: you've seen this one in earlier prints
-    "PLAYER_035"   # replace with another real athlete
+    "PLAYER_012",  
+    "PLAYER_018",  
+    "PLAYER_035"   
 ]
 
 for p in test_players:
