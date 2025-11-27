@@ -172,7 +172,167 @@ print(dataset_strength_paragraph)
 # ----------------------------------
 # 2.2 Data Transformation Challenge
 # ----------------------------------
+selected_metrics = [
+    'Peak Velocity(m/s)',
+    'Jump Height(m)',
+    'Peak Propulsive Force(N)',
+    'System Weight(N)',
+    'Propulsive Net Impulse(N.s)'
+]
 
+def make_player_wide(player_name, metrics=selected_metrics):
+    """
+    Returns a wide-format DataFrame for one athlete:
+      - one row per timestamp (test session)
+      - one column per selected metric
+      - missing values left as NaN (can be filled if desired)
+    """
+    # Build IN (...) list for SQL
+    metrics_sql = ",".join(f"'{m}'" for m in metrics)
+
+    query = f"""
+        SELECT
+            playername,
+            `timestamp`,
+            metric,
+            value
+        FROM research_experiment_refactor_test
+        WHERE playername = '{player_name}'
+          AND metric IN ({metrics_sql})
+        ORDER BY `timestamp`;
+    """
+
+    df_long = pd.read_sql(query, engine)
+
+    # Pivot from long → wide:
+    # index = timestamp, columns = metric, values = value
+    df_wide = (
+        df_long
+        .pivot_table(
+            index="timestamp",
+            columns="metric",
+            values="value",
+            aggfunc="mean"      # in case there are duplicates per timestamp/metric
+        )
+        .reset_index()
+        .sort_values("timestamp")
+    )
+
+    # Ensure all selected metrics are present as columns
+    for m in metrics:
+        if m not in df_wide.columns:
+            df_wide[m] = pd.NA
+
+    return df_wide
+
+
+# ---- Test the function on at least 3 different athletes from different teams ----
+three_athletes = pd.read_sql("""
+    SELECT team, playername
+    FROM research_experiment_refactor_test
+    GROUP BY team, playername
+    ORDER BY team
+    LIMIT 3;
+""", engine)
+
+print(three_athletes)
+
+test_players = [
+    "PLAYER_012",   # replace with a real playername from your dataset
+    "PLAYER_018",  # example: you've seen this one in earlier prints
+    "PLAYER_035"   # replace with another real athlete
+]
+
+for p in test_players:
+    print(f"\nWide-format data for {p}")
+    wide_df = make_player_wide(p)
+    print(wide_df.head())   # show first few rows
 # ----------------------------
-# 2.3 Create a Derived Metric
-# ----------------------------
+print("\n--- 2.3 Derived Metric: team means, % difference, top/bottom 5 ---")
+
+def derived_metric_for_team(metric_name):
+    """
+    Computes team mean, percent difference from team mean,
+    and identifies top/bottom 5 performers for a given metric.
+    """
+
+    # 1) Pull data
+    query = """
+        SELECT
+            team,
+            playername,
+            `timestamp`,
+            value
+        FROM research_experiment_refactor_test
+        WHERE metric = %s
+    """
+
+    # NOTE: params must be tuples, not lists
+    df = pd.read_sql(query, engine, params=(metric_name,))
+
+    if df.empty:
+        print(f"No rows found for metric: {metric_name}")
+        return df, None, None, None
+
+    # Remove null values
+    df = df.dropna(subset=["value"])
+
+    # 2) Compute team means
+    team_means = (
+        df.groupby("team")["value"]
+          .mean()
+          .reset_index()
+          .rename(columns={"value": "team_mean"})
+    )
+
+    # Attach team means back to each measurement
+    df_detail = df.merge(team_means, on="team", how="left")
+
+    # 3) % difference from team mean
+    df_detail["pct_diff_from_team_mean"] = (
+        100.0 * (df_detail["value"] - df_detail["team_mean"]) / df_detail["team_mean"]
+    )
+
+    # 4) Athlete-level summary
+    summary = (
+        df_detail.groupby(["team", "playername"])["pct_diff_from_team_mean"]
+        .mean()
+        .reset_index()
+        .rename(columns={"pct_diff_from_team_mean": "avg_pct_diff_from_team"})
+    )
+
+    # Optional: z-score within each team
+    summary["z_score_within_team"] = (
+        summary.groupby("team")["avg_pct_diff_from_team"]
+        .transform(lambda x: (x - x.mean()) / x.std(ddof=0))
+    )
+
+    # 5) Top & bottom 5 performers per team
+    top5 = (
+        summary.sort_values(["team", "avg_pct_diff_from_team"], ascending=[True, False])
+        .groupby("team")
+        .head(5)
+    )
+
+    bottom5 = (
+        summary.sort_values(["team", "avg_pct_diff_from_team"], ascending=[True, True])
+        .groupby("team")
+        .head(5)
+    )
+
+    return df_detail, summary, top5, bottom5
+
+
+# ===== Example usage =====
+metric_to_use = "Jump Height(m)"
+
+detail, summary, top5_jump, bottom5_jump = derived_metric_for_team(metric_to_use)
+
+print("\nSummary:")
+print(summary.head())
+
+print("\nTop 5 performers:")
+print(top5_jump)
+
+print("\nBottom 5 performers:")
+print(bottom5_jump)
