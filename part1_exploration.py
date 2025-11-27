@@ -1,8 +1,8 @@
 # Database Connection & Data Exploration
 
-#-------------------------------------------------
+# -------------------
 # 1.1 Database Setup 
-#-------------------------------------------------
+# -------------------
 
 ## Load Libraries and Connect to SQL Database
 from sqlalchemy import create_engine
@@ -41,11 +41,11 @@ limit 50;
 response = pd.read_sql(sql_toexecute, engine)
 print(response)
 
-#--------------------------------------
+# --------------------------------------
 # 1.2 Data Quality Assessment Questions 
-#--------------------------------------
+# --------------------------------------
 
-#-------------------------------------------------
+# -------------------------------------------------
 # 1. How many unique athletes are in the database?
 
 print("\n--- 1. Unique Athletes ---")
@@ -56,7 +56,7 @@ FROM research_experiment_refactor_test;
 result_unique = pd.read_sql(query_unique_athletes, engine)
 print(result_unique)
 
-#-------------------------------------------------------------
+# -------------------------------------------------------------
 # 2. How many different sports/teams are represented? (Carson)
 print("\n--- 2. Number of Teams/Sports ---")
 query_teams = f"""
@@ -65,7 +65,7 @@ FROM research_experiment_refactor_test;
 """
 print(pd.read_sql(query_teams, engine))
 
-#-------------------------------------------------
+# -------------------------------------------------
 # 3. What is the date range of available data?
 print("\n--- 3. Date Range of Available Data ---")
 query_date_range = """
@@ -77,7 +77,7 @@ FROM research_experiment_refactor_test;
 result_date_range = pd.read_sql(query_date_range, engine)
 print(result_date_range)
 
-#------------------------------------------------------------------
+# ------------------------------------------------------------------
 # 4. Which data source (Hawkins/Kinexon/Vald) has the most records?
 print("\n--- 4. Records Per Data Source ---")
 query_sources = f"""
@@ -89,7 +89,7 @@ ORDER BY record_count DESC;
 """
 print(pd.read_sql((query_sources), engine))
 
-#---------------------------------------------------------
+# ---------------------------------------------------------
 # 5. Are there any athletes with missing or invalid names?
 print("\n--- 5. Missing or Invalid Player Names ---")
 query_missing_names = f"""
@@ -101,7 +101,7 @@ WHERE playername IS NULL
 """
 print(pd.read_sql(query_missing_names, engine))
 
-#-----------------------------------------------------------------------
+# -----------------------------------------------------------------------
 # 6. How many athletes have data from multiple sources (2 or 3 systems)?
 print("\n--- 6. Athletes With Data From 2 or More Sources ---")
 query_multisource = f"""
@@ -182,13 +182,13 @@ print("\n Saved summary CSV: part1_summary.csv")
 
 engine.dispose()
 
-#------------------------------------
-#1.3 Data Quality Assessment Findings
-#------------------------------------
+# ------------------------------------
+# 1.3 Data Quality Assessment Findings
+# ------------------------------------
 
 print("\n--- 1.3 Top 10 Metrics Per Data Source ---")
 
-# Helper: function to get top 10 metrics for a data_source
+# Function to get top 10 metrics for a data_source
 def top10_metrics_for_source(source):
     query = f"""
     SELECT metric,
@@ -223,7 +223,7 @@ FROM research_experiment_refactor_test;
 unique_metrics = pd.read_sql(query_unique_metrics, engine)
 print(unique_metrics)
 
-# c) For each data source, show date range and record count for its TOP 10 metrics
+# c) For each data source, show the date range and record count for its TOP 10 metrics
 print("\n--- 11. Date Range & Record Count by Data Source ---")
 query_source_summary = f"""
 SELECT
