@@ -34,6 +34,12 @@ print("NULL/Zero Analysis - Sorted from HIGHEST to LOWEST percentage:")
 print("="*80)
 print(df_null_focused.to_string(index=False))
 
+### To save to a CSV summary 
+missing_summary = df_null_focused.sort_values("null_zero_percentage", ascending=False)
+
+missing_summary.to_csv("part2_missing_values_summary_overall.csv", index=False)
+print("\nSaved overall missing values summary to 'part2_missing_values_summary_overall.csv'")
+
 # ----------------------------------------------------------------------------------------------------------------------
 ## 2. For each sport/team, calculate what percentage of athletes have at least 5 measurements for your selected metrics
 # ----------------------------------------------------------------------------------------------------------------------
