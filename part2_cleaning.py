@@ -5,7 +5,7 @@
 # --------------------------
 
 # -----------------------------------------------------------------------------
-## 1. Identify which of your selected metrics have the most NULL or zero values
+## 2.1.1 Identify which of your selected metrics have the most NULL or zero values
 # -----------------------------------------------------------------------------
 import pandas as pd
 from sqlalchemy import create_engine
@@ -72,7 +72,7 @@ missing_summary.to_csv("part2_missing_values_summary_overall.csv", index=False)
 print("\nSaved overall missing values summary to 'part2_missing_values_summary_overall.csv'")
 
 # ----------------------------------------------------------------------------------------------------------------------
-## 2. For each sport/team, calculate what percentage of athletes have at least 5 measurements for your selected metrics
+## 2.1.2 For each sport/team, calculate what percentage of athletes have at least 5 measurements for your selected metrics
 # ----------------------------------------------------------------------------------------------------------------------
 print("\n--- 2. Percentage of athletes with >=5 measurements for selected metrics, by team ---")
 
@@ -107,6 +107,15 @@ ORDER BY team;
 
 result_pct = pd.read_sql(query_pct, engine)
 print(result_pct)
+# ----------------------------------------------------------------------------------------------------------------------
+## 2.1.3 For each sport/team, calculate what percentage of athletes have at least 5 measurements for your selected metrics
+# ----------------------------------------------------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------------------------------------------------
+## 2.1.4 Determine if you have sufficient data to answer your research question
+# ----------------------------------------------------------------------------------------------------------------------
+
+
 # ----------------------------------
 # 2.2 Data Transformation Challenge
 # ----------------------------------
