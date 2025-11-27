@@ -1,4 +1,8 @@
-# 1.2 Data Quality Assessment Questions 
+# Database Connection & Data Exploration
+
+#-------------------------------------------------
+# 1.1 Database Setup 
+#-------------------------------------------------
 
 ## Load Libraries and Connect to SQL Database
 from sqlalchemy import create_engine
@@ -37,9 +41,13 @@ limit 50;
 response = pd.read_sql(sql_toexecute, engine)
 print(response)
 
+#--------------------------------------
+# 1.2 Data Quality Assessment Questions 
+#--------------------------------------
+
 #-------------------------------------------------
 # 1. How many unique athletes are in the database?
-#-------------------------------------------------
+
 print("\n--- 1. Unique Athletes ---")
 query_unique_athletes = """
 SELECT COUNT(DISTINCT playername) AS unique_athletes
@@ -50,7 +58,6 @@ print(result_unique)
 
 #-------------------------------------------------------------
 # 2. How many different sports/teams are represented? (Carson)
-#-------------------------------------------------------------
 print("\n--- 2. Number of Teams/Sports ---")
 query_teams = f"""
 SELECT COUNT(DISTINCT team) AS num_teams
@@ -60,7 +67,6 @@ print(pd.read_sql(query_teams, engine))
 
 #-------------------------------------------------
 # 3. What is the date range of available data?
-#-------------------------------------------------
 print("\n--- 3. Date Range of Available Data ---")
 query_date_range = """
 SELECT
@@ -73,7 +79,6 @@ print(result_date_range)
 
 #------------------------------------------------------------------
 # 4. Which data source (Hawkins/Kinexon/Vald) has the most records?
-#------------------------------------------------------------------
 print("\n--- 4. Records Per Data Source ---")
 query_sources = f"""
 SELECT data_source,
@@ -86,7 +91,6 @@ print(pd.read_sql((query_sources), engine))
 
 #---------------------------------------------------------
 # 5. Are there any athletes with missing or invalid names?
-#---------------------------------------------------------
 print("\n--- 5. Missing or Invalid Player Names ---")
 query_missing_names = f"""
 SELECT COUNT(*) AS missing_or_invalid_names
@@ -99,7 +103,6 @@ print(pd.read_sql(query_missing_names, engine))
 
 #-----------------------------------------------------------------------
 # 6. How many athletes have data from multiple sources (2 or 3 systems)?
-#-----------------------------------------------------------------------
 print("\n--- 6. Athletes With Data From 2 or More Sources ---")
 query_multisource = f"""
 SELECT playername,
