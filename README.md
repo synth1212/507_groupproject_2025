@@ -118,5 +118,8 @@ Thumbs.db
 
 ## Screenshots (Evidence of Setup)
 
-- Part 1 – Exploration (Kalin Yuen)  
+* Part 1 – Exploration (Kalin Yuen)  
   ![Part 1 – First 10 Rows](screenshots/kalin.png)
+
+* Part 1 – Exploration (Cynthia Chen)
+    ![Part 1 – First 10 Rows](screenshots/cynthia.jpg)
