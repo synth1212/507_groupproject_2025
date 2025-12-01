@@ -259,3 +259,31 @@ FROM research_experiment_refactor_test;
 """
 unique_metrics = pd.read_sql(query_unique_metrics, engine)
 print(unique_metrics)
+
+
+# c) What is the date range and record count for the top metrics
+print("Date Range & Record Count by Data Source")
+
+query_source_summary = """
+SELECT
+    data_source,
+    COUNT(*) AS record_count,
+    MIN(timestamp) AS earliest_date,
+    MAX(timestamp) AS latest_date
+FROM research_experiment_refactor_test
+GROUP BY data_source
+ORDER BY record_count DESC
+LIMIT 10;
+"""
+print(pd.read_sql((query_source_summary), engine))
+
+source_summary_df = pd.read_sql(query_source_summary, engine)
+
+print("\nHawkins - Date range & counts")
+print(source_summary_df[source_summary_df["data_source"] == "hawkins"])
+
+print("\nKinexon - Date range & counts")
+print(source_summary_df[source_summary_df["data_source"] == "kinexon"])
+
+print("\nVald - Date range & counts")
+print(source_summary_df[source_summary_df["data_source"] == "vald"])
