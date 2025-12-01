@@ -110,10 +110,6 @@ print(result_pct)
 # ----------------------------------------------------------------------------------------------------------------------
 ## 2.1.3 Identify athletes who haven't been tested in the last 6 months (for your selected metrics)
 # ----------------------------------------------------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-# 2.1.3 Identify athletes who haven't been tested in the last 6 months
-#      (for your selected metrics)
-# -----------------------------------------------------------------------------
 print("\n--- 2.1.3 Athletes NOT tested in last 6 months (selected metrics) ---")
 
 selected_metrics_213 = [
