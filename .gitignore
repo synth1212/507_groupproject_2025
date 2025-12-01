@@ -11,7 +11,7 @@ __pycache__/
 *.ipynb_checkpoints/
 # Data files (if you download data locally)
 *.csv
-!*part4_flagged.csv # Allow specific flagged files
+!*part4_flagged_athletes.csv # Allow specific flagged files
 *.pkl
 *.xlsx
 !*_example.csv # Allow example files
