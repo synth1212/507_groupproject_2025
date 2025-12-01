@@ -29,13 +29,12 @@ venv\Scripts\activate      # Windows PowerShell
     sql_password = os.getenv('password')
     sql_host = os.getenv('hostname')
     sql_database = os.getenv('database')
-- ## with SSL off
-url_string = f"mysql+pymysql://{sql_username}:{sql_password}@{sql_host}:3306/{sql_database}"
 
-## Create the connection
-conn = create_engine(url_string)
+- url_string = f"mysql+pymysql://{sql_username}:{sql_password}@{sql_host}:3306/{sql_database}"
 
-engine = create_engine(
+- conn = create_engine(url_string)
+
+- engine = create_engine(
      "mysql+pymysql://ahistudent:researcher@shtm-fallprev.mysql.database.azure.com:3306/sbu_athletics"
 )
 ## Project Structure Overview
