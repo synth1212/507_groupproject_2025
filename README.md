@@ -20,8 +20,6 @@ venv\Scripts\activate      # Windows PowerShell
 
 - pip install -r requirements.txt
 
-
-
 ## How to Run Each Script
 
 ## Database Connection Instructions
