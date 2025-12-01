@@ -99,17 +99,21 @@ Thumbs.db
 
 ```
 507_groupproject_2025/
-├── part1_exploration.py          # Data exploration & quality checks (Part 1)
-├── part2_cleaning.py             # Cleaning, long→wide transform, derived metrics (Part 2)
-├── part3_visualization.py        # (Optional) Plots/dashboards (if created)
-├── part4_flags.py                # Performance monitoring flag system (Part 4)
-├── requirements.txt              # Python dependencies
-├── test.env / .env               # Local DB credentials (not committed to Git ideally)
-├── README.md                     # Project documentation (this file)
-└── output/
-    ├── part2_missing_values_summary_overall.csv
-    ├── part2_wide_format_examples.csv
-    └── part4_flagged_athletes.csv
+├── README.md (with group member names, roles, and contributions)
+├── references.md (full bibliography in APA or similar format)
+├── .env.example (template for database credentials - DO NOT include actual credentials)
+├── .gitignore (exclude .env, data files, etc.)
+├── part1_exploration.py
+├── part1_summary.pdf
+├── part1_literature_review.pdf (NEW - your metric selection and lit review)
+├── part2_cleaning.py
+├── part3_viz_individual.ipynb
+├── part3_viz_comparison.ipynb
+├── part4_flags.py
+├── part4_flagged_athletes.csv
+├── part4_flag_justification.pdf (NEW - explain your thresholds)
+├── part4_research_synthesis.pdf (NEW - replaces sport_analysis.pdf)
+└── final_presentation.pdf
 ```
 
 ## Screenshots (Evidence of Setup)
