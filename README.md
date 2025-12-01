@@ -59,6 +59,7 @@ __pycache__/
 
 # Data files (if you download data locally)
 *.csv
+!*part4_flagged_athletes.csv # Allow csv files to be staged and commited
 *.pkl
 *.xlsx
 !*_example.csv  # Allow example files
