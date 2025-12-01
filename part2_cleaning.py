@@ -108,40 +108,52 @@ ORDER BY team;
 result_pct = pd.read_sql(query_pct, engine)
 print(result_pct)
 # ----------------------------------------------------------------------------------------------------------------------
-## 2.1.3 For each sport/team, calculate what percentage of athletes have at least 5 measurements for your selected metrics
+## 2.1.3 Identify athletes who haven't been tested in the last 6 months (for your selected metrics)
 # ----------------------------------------------------------------------------------------------------------------------
-print("\n--- 2. Percentage of athletes with >=5 measurements for selected metrics, by team ---")
+# -----------------------------------------------------------------------------
+# 2.1.3 Identify athletes who haven't been tested in the last 6 months
+#      (for your selected metrics)
+# -----------------------------------------------------------------------------
+print("\n--- 2.1.3 Athletes NOT tested in last 6 months (selected metrics) ---")
 
-query_pct = """
+selected_metrics_213 = [
+    "Peak Velocity(m/s)",
+    "Jump Height(m)",
+    "Peak Propulsive Force(N)",
+    "System Weight(N)",
+    "Propulsive Net Impulse(N.s)",
+]
+
+# Build placeholders: %s, %s, ...
+placeholders_213 = ",".join(["%s"] * len(selected_metrics_213))
+
+query_not_tested = f"""
 SELECT
+    playername,
     team,
-    COUNT(*) AS total_athletes,
-    SUM(CASE WHEN n_measurements >= 5 THEN 1 ELSE 0 END) AS athletes_5_plus,
-    ROUND(
-        100.0 * SUM(CASE WHEN n_measurements >= 5 THEN 1 ELSE 0 END) / COUNT(*),
-        2
-    ) AS pct_athletes_5_plus
-FROM (
-    SELECT
-        team,
-        playername,
-        COUNT(*) AS n_measurements
-    FROM research_experiment_refactor_test
-    WHERE metric IN (
-        'Peak Velocity(m/s)',
-        'Jump Height(m)',
-        'Peak Propulsive Force(N)',
-        'System Weight(N)',
-        'Propulsive Net Impulse(N.s)'
-    )
-    GROUP BY team, playername
-) AS per_athlete
-GROUP BY team
-ORDER BY team;
+    MAX(`timestamp`) AS last_test
+FROM research_experiment_refactor_test
+WHERE metric IN ({placeholders_213})
+GROUP BY playername, team
+HAVING MAX(`timestamp`) < DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+ORDER BY last_test;
 """
 
-result_pct = pd.read_sql(query_pct, engine)
-print(result_pct)
+athletes_not_tested_6m = pd.read_sql(
+    query_not_tested,
+    engine,
+    params=tuple(selected_metrics_213)   # tuple, not list (SQLAlchemy quirk)
+)
+
+print(athletes_not_tested_6m)
+
+# Optional: save to CSV
+athletes_not_tested_6m.to_csv(
+    "part2_athletes_not_tested_last_6_months.csv",
+    index=False
+)
+print("\nSaved list to 'part2_athletes_not_tested_last_6_months.csv'")
+
 # ----------------------------------------------------------------------------------------------------------------------
 ## 2.1.4 Determine if you have sufficient data to answer your research question
 # ----------------------------------------------------------------------------------------------------------------------
