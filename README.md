@@ -12,6 +12,32 @@
     - Role: Developer
 - Tanveer Kaur
     - Role: Researcher
+## Database Overview
+
+The athletics database contains performance data from multiple tracking systems integrated into a single unified table.
+
+### Main Table:
+**`research_experiment_refactor_test`** - Single unified table containing all performance metrics from three data sources:
+- Hawkins (force plates)
+- Kinexon (GPS/accelerometry)
+- Vald (strength testing)
+
+### Table Schema:
+
+| Column | Type | Description |
+|--------|------|-------------|
+| **id** | BIGINT | Unique record identifier (auto-increment) |
+| **playername** | VARCHAR(255) | Anonymized player identifier (e.g., PLAYER_001, PLAYER_002) |
+| **timestamp** | DATETIME | Date and time of the measurement/session |
+| **device** | VARCHAR(50) | Specific device/equipment used for measurement |
+| **metric** | VARCHAR(255) | Name of the performance metric being measured |
+| **value** | DECIMAL(20,6) | Numeric value of the metric |
+| **team** | VARCHAR(255) | Sport/team affiliation (e.g., Football, Soccer, Basketball) |
+| **session_type** | VARCHAR(255) | Type of session (e.g., Practice, Game, Training) - only relevant for Kinexon |
+| **session_description** | TEXT | Detailed description of the session |
+| **function_description** | VARCHAR(255) | Movement or exercise description |
+| **data_source** | VARCHAR(50) | Original data source (Hawkins, Kinexon, or Vald) |
+| **created_at** | TIMESTAMP | Record creation timestamp |
 
 ## Setup Instructions (how to install dependencies)
 1. In your machine terminal, create a virtual environment by:
