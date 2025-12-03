@@ -74,7 +74,6 @@ print("\nSaved overall missing values summary to 'part2_missing_values_summary_o
 # ----------------------------------------------------------------------------------------------------------------------
 ## 2.1.2 For each sport/team, calculate what percentage of athletes have at least 5 measurements for your selected metrics
 # ----------------------------------------------------------------------------------------------------------------------
-print("\n--- 2. Percentage of athletes with >=5 measurements for selected metrics, by team ---")
 
 # our selected metrics
 print("\n--- 2. Percentage of athletes with >=5 measurements for selected metrics, by team ---")

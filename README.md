@@ -12,8 +12,8 @@
     - Role: Developer
 - Tanveer Kaur
     - Role: Researcher
-## Database Overview
 
+## Database Overview
 The athletics database contains performance data from multiple tracking systems integrated into a single unified table.
 
 ### Main Table:
@@ -54,7 +54,7 @@ venv\Scripts\activate      # Windows PowerShell
 pip install -r requirements.txt
 ```
     
-* The `requirement.txt` file should consist of:
+* The `requirements.txt` file should consist of:
 
 ```python
 pandas
