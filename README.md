@@ -150,3 +150,7 @@ Thumbs.db
 
 * Part 1 – Exploration (Cynthia Chen)
     ![Part 1 – First 10 Rows](screenshots/cynthia.jpg)
+
+* Part 1 – Exploration (Tanveer Kaur)
+    ![Part 1 – First 10 Rows](screenshots/tanveer.png)
+
