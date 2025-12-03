@@ -13,6 +13,8 @@
 - Tanveer Kaur
     - Role: Researcher
 
+*Our team contributed collectively on this project, working on both the scripts and written components over our scheduled Zoom sessions.*
+
 ## Database Overview
 The athletics database contains performance data from multiple tracking systems integrated into a single unified table.
 
@@ -156,4 +158,7 @@ Thumbs.db
 
 * Part 1 - Exploration (Rozelle Thompson)
     ![Part 1 – First 10 Rows](screenshots/rozelle.png)
+
+* Part 1 - Exploration (Carson Chin)
+    ![Part 1 – First 10 Rows](screenshots/carson.png)
 
