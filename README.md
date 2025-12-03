@@ -154,3 +154,6 @@ Thumbs.db
 * Part 1 – Exploration (Tanveer Kaur)
     ![Part 1 – First 10 Rows](screenshots/tanveer.png)
 
+* Part 1 - Exploration (Rozelle Thompson)
+    ![Part 1 – First 10 Rows](screenshots/rozelle.png)
+
