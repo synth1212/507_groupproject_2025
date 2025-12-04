@@ -1,9 +1,6 @@
 # pip install pymysql sqlalchemy pandas python-dotenv
 
-import pandas as pd
-from sqlalchemy import create_engine
-import os
-from dotenv import load_dotenv ## Load Libraries and Connect to SQL Database
+## Load Libraries and Connect to SQL Database
 from sqlalchemy import create_engine
 import pandas as pd
 import os
@@ -26,7 +23,7 @@ url_string = f"mysql+pymysql://{sql_username}:{sql_password}@{sql_host}:3306/{sq
 ## Create the connection
 engine = create_engine("mysql+pymysql://ahistudent:researcher@shtm-fallprev.mysql.database.azure.com:3306/sbu_athletics")
 
-""" Your Task:
+""" Task:
 1. Based on your literature review, define 2-3 clinically/performance-relevant thresholds:
     * Examples: metric declined by X% compared to baseline
     * Metric below/above published risk threshold
@@ -41,10 +38,10 @@ engine = create_engine("mysql+pymysql://ahistudent:researcher@shtm-fallprev.mysq
 # -------------------------------------------
 # Threshold (based on research literature)
 # -------------------------------------------
-# threshold 1: women jump height
+# threshold 1: women's jump height
 women_jump_height_threshold = 0.30 # meters
 
-# threshold 2: women peak propulsive force
+# threshold 2: women's peak propulsive force
 women_peak_propulsive_force_threshold = 1200 # newtons
 
 print("Based on research literature for female collegiate athletes:")
@@ -77,7 +74,7 @@ df = initial_df.pivot_table( # this is also so we can see both test in on table
 
 df.head()
 
-# get most recent test result of players
+# get the most recent test result of players
 idx_recent = df.groupby(["playername", "team"])["timestamp"].idxmax()
 recent_tests = df.loc[idx_recent].copy()
 
@@ -91,7 +88,7 @@ for _, row in recent_tests.iterrows():
     team = row["team"]
     test_date = row["timestamp"]
 
-    # ------ JUMP HEIGHT THRESHOLD ------
+    # JUMP HEIGHT THRESHOLD
     if pd.notna(row["Jump Height(m)"]):
         if row["Jump Height(m)"] < women_jump_height_threshold:
             flags.append({
@@ -103,7 +100,7 @@ for _, row in recent_tests.iterrows():
                 "last_test_date": test_date
             })
 
-    # ------ PEAK PROPULSIVE FORCE THRESHOLD ------
+    # PEAK PROPULSIVE FORCE THRESHOLD
     if pd.notna(row["Peak Propulsive Force(N)"]):
         if row["Peak Propulsive Force(N)"] < women_peak_propulsive_force_threshold:
             flags.append({
