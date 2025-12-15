@@ -1,13 +1,6 @@
 # 507_groupproject_2025
 - This project analyzes longitudinal jump testing data from Stony Brook University Athletics. Using Hawkins force-plate metrics, we explore how force- and velocity-based variables relate to jump height and use those insights to build simple performance-monitoring tools.
 
-**Learning Objectives:**
-- Connect to and query relational databases using Python
-- Clean and transform data
-- Perform exploratory data analysis on longitudinal (repeat) performance metrics
-- Create data visualizations to communicate findings
-- Work collaboratively
-
 ## Group Members & Roles:
 - Cynthia Chen
     - Role: Team Lead
@@ -19,8 +12,6 @@
     - Role: Developer
 - Tanveer Kaur
     - Role: Researcher
-
-*Our team contributed collectively on this project, working on both the scripts and written components over our scheduled Zoom sessions.*
 
 ## Database Overview
 The athletics database contains performance data from multiple tracking systems integrated into a single unified table.
@@ -163,9 +154,5 @@ Thumbs.db
 * Part 1 – Exploration (Tanveer Kaur)
     ![Part 1 – First 10 Rows](screenshots/tanveer.png)
 
-* Part 1 - Exploration (Rozelle Thompson)
-    ![Part 1 – First 10 Rows](screenshots/rozelle.png)
-
-* Part 1 - Exploration (Carson Chin)
+* Part 1 – Exploration (Carson Chin)
     ![Part 1 – First 10 Rows](screenshots/carson.png)
-
